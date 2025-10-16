@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -108,6 +110,17 @@ public class CustomerController {
     		}
     	}catch(Exception e) {
     		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_INTERNAL_ERROR,Constants.FAILED, "Internal server error"));
+    	}
+    }
+    
+    @GetMapping("/getByCustmerId/{id}")
+    public ResponseEntity<ResponseMessage> customerORUpdates(@PathVariable Long id){
+    	
+    	Customer byCustomersId = customerService.getByCustomersId(id);
+    	if(byCustomersId!=null) {
+    		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_OK,Constants.SUCCESS,"customer id getting successfully",byCustomersId));
+    	}else {
+    		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_BAD_REQUEST, Constants.FAILED, "custmer id getting Failed", byCustomersId));
     	}
     }
 }

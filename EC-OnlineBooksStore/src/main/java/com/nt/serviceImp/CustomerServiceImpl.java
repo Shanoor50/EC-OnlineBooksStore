@@ -46,4 +46,13 @@ public class CustomerServiceImpl implements CustomerService {
 		return customer;
 	}
 
+	@Override
+	public Customer getByCustomersId(Long id) {
+		Optional<Customer> byId = customerRepo.findById(id);
+		if(!byId.isPresent()) {
+			throw new RuntimeException("Customer Id Not Found");
+		}
+		return byId.get();
+	}
+
 }

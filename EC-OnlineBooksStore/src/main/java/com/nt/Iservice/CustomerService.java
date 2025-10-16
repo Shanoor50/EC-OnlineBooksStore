@@ -9,5 +9,7 @@ public interface CustomerService {
 	public Customer UpdatesCustomers(Customer customer);
 	
 	public Customer createdOrUpdatessCustomers(Customer customer);
+	
+	public Customer getByCustomersId(Long id);
 
 }
