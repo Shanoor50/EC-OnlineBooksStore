@@ -1,8 +1,10 @@
 package com.nt.controller;
 
 import java.net.HttpURLConnection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nt.Iservice.CustomerService;
@@ -121,6 +124,27 @@ public class CustomerController {
     		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_OK,Constants.SUCCESS,"customer id getting successfully",byCustomersId));
     	}else {
     		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_BAD_REQUEST, Constants.FAILED, "custmer id getting Failed", byCustomersId));
+    	}
+    }
+    
+    @GetMapping("/getAllCustomers")
+    public ResponseEntity<ResponseMessage> getAllCustomer(){
+    	List<Customer> byAllCustomers = customerService.getByAllCustomers();
+    	if(byAllCustomers!=null) {
+    		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_OK,Constants.SUCCESS,"customer getting all successfully",byAllCustomers));
+    	}else {
+    		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_BAD_REQUEST,Constants.FAILED,"customer id getting Failed",byAllCustomers));
+    	}
+    }
+    
+    @GetMapping("/getAllCustmerswithpagination")
+    public ResponseEntity<ResponseMessage> getByAllCustomerpagination(@RequestParam int page,@RequestParam int size,@RequestParam String sortField,@RequestParam String pageDir){
+    	Page<Customer> byAllCustomerPaga=customerService.getByAllCustomersWithPaginations(page,size,sortField,pageDir);
+    	
+    	if(byAllCustomerPaga!=null) {
+    		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_OK,Constants.SUCCESS,"All Customers getting with pagination successfully",byAllCustomerPaga));
+    	}else {
+    		return ResponseEntity.ok(new ResponseMessage(HttpURLConnection.HTTP_BAD_REQUEST,Constants.FAILED,"All Customers Fail to get pagination",byAllCustomerPaga));
     	}
     }
 }

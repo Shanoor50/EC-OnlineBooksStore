@@ -18,12 +18,14 @@ public class UserRegisterServiceImp implements UserRegisterService {
     public UserRegister insertUserRegister(UserRequestDto userRequestDto) {
         UserRegister user = new UserRegister();
         try {
-            user.setFirstName(userRequestDto.getFirstName());
-            user.setLastName(userRequestDto.getLastName());
-            user.setEmail(userRequestDto.getEmail());
-            user.setPassword(userRequestDto.getPassword());
-            user.setContactId(userRequestDto.getContactId());
-
+			
+			  user.setFirstName(userRequestDto.getFirstName());
+			  user.setLastName(userRequestDto.getLastName());
+			  user.setEmail(userRequestDto.getEmail());
+			  user.setPassword(userRequestDto.getPassword());
+			  user.setContactId(userRequestDto.getContactId());
+			 
+            	
             // Save to DB
             user = userRepo.save(user);
 
