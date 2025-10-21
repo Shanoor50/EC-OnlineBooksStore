@@ -3,6 +3,7 @@ package com.nt.controller;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,8 @@ import com.nt.Iservice.CustomerService;
 import com.nt.entity.Customer;
 import com.nt.model.ResponseMessage;
 import com.nt.utility.Constants;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,7 +29,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 public class CustomerController {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+	
     @Autowired
     private CustomerService customerService;
 
@@ -39,9 +43,13 @@ public class CustomerController {
      })
     @PostMapping("/customersave")
     public ResponseEntity<ResponseMessage> createCustomers(@RequestBody Customer customer) {
+    	logger.info("");
         try {
             if (customer.getEmail() == null || customer.getEmail().isEmpty() ||
                 customer.getName() == null || customer.getName().isEmpty()) {
+            	logger.debug("Recieved CustomerData:{}",customer);
+            	logger.warn("missing email and password customer request");
+            	logger.error("Customer Save email or password missing : Bad reg data ");
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseMessage(
@@ -53,6 +61,7 @@ public class CustomerController {
             Customer savedCustomer = customerService.insertCustomer(customer);
 
             if (savedCustomer != null) {
+            	logger.info("Message return eco-System=\"Customer Save SUCCESSFULLY");
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
                         .body(new ResponseMessage(
@@ -61,6 +70,9 @@ public class CustomerController {
                                 "Customer saved successfully",
                                 savedCustomer));
             } else {
+            	logger.info("Message return eco-System=\\\"Customer Save FAILED");
+            	logger.info("Customer Controller layer calling completed ");
+            	logger.warn("Customer Save service return null : Save FAILED");
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseMessage(
@@ -70,6 +82,7 @@ public class CustomerController {
             }
 
         } catch (Exception e) {
+        	logger.error("New Customer Save Process failed in BookStore-DB . Exception: "+e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseMessage(
