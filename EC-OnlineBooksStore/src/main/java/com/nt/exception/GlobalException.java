@@ -24,5 +24,15 @@ public class GlobalException {
 		ErrorResponseMessage error=new ErrorResponseMessage(HttpURLConnection.HTTP_BAD_REQUEST,Constants.FAILURE,"NOT AVAILABLE",details);
 		return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(BookIdNotFoundException.class)
+	public ResponseEntity<Object> BookIdNotFoundException(BookIdNotFoundException ex){
+		List<String> details=new ArrayList<>();
+		details.add("Error:Customer Id Not Available");
+		details.add("Detailed Message:"+ex.getLocalizedMessage());
+		details.add("Timestamp:"+System.currentTimeMillis());
+		ErrorResponseMessage error=new ErrorResponseMessage(HttpURLConnection.HTTP_BAD_REQUEST,Constants.FAILURE,"NOT AVAILABLE",details);
+		return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+	}
 
 }
